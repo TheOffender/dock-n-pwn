@@ -1,0 +1,59 @@
+services:
+  parrot:
+    image: parrotsec/security:5.3 
+    container_name: parrot
+    stdin_open: true
+    tty: true
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    volumes:
+      - parrot-home:/root
+      - ./parrot-share:/root/
+    networks:
+      - lab-net
+    restart: unless-stopped
+
+  juice-shop:
+    image: bkimminich/juice-shop
+    container_name: juice-shop
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - lab-net
+
+  webgoat:
+    image: webgoat/webgoat
+    container_name: webgoat
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3001:8080"
+    networks:
+      - lab-net
+
+  dvwa:
+    image: vulnerables/web-dvwa
+    container_name: dvwa
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3002:80"
+    networks:
+      - lab-net
+
+  metasploitable2:
+    image: tleemcjr/metasploitable2
+    container_name: metasploitable2
+    restart: unless-stopped
+    networks:
+      - lab-net
+
+networks:
+  lab-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.10.0.0/24
+
+volumes:
+  parrot-home:

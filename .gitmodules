@@ -1,0 +1,3 @@
+[submodule "vulhub"]
+	path = vulhub
+	url = https://github.com/TheOffender/vulhub.git
